@@ -1,6 +1,7 @@
 #(m, n)
 import copy, random
 
+'''
 def matrix_bad_but_accurate(lst):
     if len(lst) < 2:
         return 0
@@ -16,7 +17,32 @@ def matrix_bad_but_accurate(lst):
         if best == -1 or cost < best:
             best = cost
     return best
+'''
 
+def matrix_bad_but_accurate(lst):
+    #print (lst)
+    if len(lst) < 2:
+        #print ("were in the base case")
+        return (0, [])
+    best = -1
+    best_idx = 0
+    best_path = []
+    for i in range(1, len(lst)):
+        curr = lst[i]
+        prev = lst[i-1]
+        cost = prev[0] * curr[0] * curr[1]
+        cpy = copy.deepcopy(lst)
+        cpy[i] = (prev[0], curr[1])
+        del cpy[i-1]
+        (rec_cost, rec_path) = matrix_bad_but_accurate(cpy)
+        #print ((rec_cost, rec_path))
+        cost = cost + rec_cost
+        if best == -1 or cost < best:
+            best = cost
+            best_idx = i
+            best_path = rec_path
+    best_path.append(best_idx)
+    return (best, best_path)
 
 def test_matrix(lst):
     lst = copy.deepcopy(lst)
@@ -59,4 +85,9 @@ def test():
             print("Correct Answer: {correct} \n False Answer: {incorrect}".format(correct=correct, incorrect=test_ans))
             return False
 
-test()
+#test()
+
+use = [(428, 288), (288, 473), (473, 147), (147, 276), (276, 214)]
+
+print( matrix_bad_but_accurate(use) )
+print( test_matrix(use) )
