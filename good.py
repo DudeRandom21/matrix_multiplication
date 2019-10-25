@@ -1,24 +1,6 @@
 #(m, n)
 import copy, random
 
-'''
-def matrix_bad_but_accurate(lst):
-    if len(lst) < 2:
-        return 0
-    best = -1
-    for i in range(1, len(lst)):
-        curr = lst[i]
-        prev = lst[i-1]
-        cost = prev[0] * curr[0] * curr[1]
-        cpy = copy.deepcopy(lst)
-        cpy[i] = (prev[0], curr[1])
-        del cpy[i-1]
-        cost = cost + matrix_bad_but_accurate(cpy)
-        if best == -1 or cost < best:
-            best = cost
-    return best
-'''
-
 def matrix_bad_but_accurate(lst):
     #print (lst)
     if len(lst) < 2:
@@ -78,16 +60,31 @@ def test():
         test = gen_test_cases(5, 1, 500)
         test_cases.append(test)
     for case in test_cases:
-        correct = matrix_bad_but_accurate(case)
+        correct = matrix_bad_but_accurate(case)[0]
         test_ans = test_matrix(case)
         if correct != test_ans:
             print(case)
             print("Correct Answer: {correct} \n False Answer: {incorrect}".format(correct=correct, incorrect=test_ans))
             return False
 
-#test()
+def trace(lst, indecies):
+    if len(lst) < 2:
+        return
 
-use = [(428, 288), (288, 473), (473, 147), (147, 276), (276, 214)]
+    lst = copy.deepcopy(lst)
+    indecies = copy.deepcopy(indecies)
+    i = indecies.pop()
+    (left, _) = lst.pop(i-1)
+    (_, right) = lst.pop(i-1)
+    lst.insert(i-1, (left, right) )
+    print(lst)
+    trace(lst, indecies)
 
-print( matrix_bad_but_accurate(use) )
-print( test_matrix(use) )
+
+# test()
+
+# use = [(428, 288), (288, 473), (473, 147), (147, 276), (276, 214)]
+
+# print( matrix_bad_but_accurate(use) )
+# print( test_matrix(use) )
+
