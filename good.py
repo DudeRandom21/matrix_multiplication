@@ -60,31 +60,37 @@ def test():
         correct, path = matrix_bad_but_accurate(case)
         test_ans = test_matrix(case)
         if correct != test_ans:
-            print(case)
             print("Correct Answer: {correct} \n False Answer: {incorrect}".format(correct=correct, incorrect=test_ans))
             print("Path: ", path)
             trace(case, path)
             return False
 
 def trace(lst, indecies):
-    if len(lst) < 2:
+
+    def helper(lst, indecies):
+        if len(lst) < 2:
+            print(lst)
+            return
+        lst = copy.deepcopy(lst)
         print(lst)
-        return
-
+        indecies = copy.deepcopy(indecies)
+        i = indecies.pop()
+        (n1, left, _) = lst.pop(i-1)
+        (n2, _, right) = lst.pop(i-1)
+        lst.insert(i-1, (n1 + n2, left, right) )
+        helper(lst, indecies)
+    
     lst = copy.deepcopy(lst)
-    print(lst)
-    indecies = copy.deepcopy(indecies)
-    i = indecies.pop()
-    (left, _) = lst.pop(i-1)
-    (_, right) = lst.pop(i-1)
-    lst.insert(i-1, (left, right) )
-    trace(lst, indecies)
+    for i in range(len(lst)):
+        lst[i] = (chr(i+65), lst[i][0], lst[i][1])
+    
+    helper(lst, indecies)
 
 
-#test()
+test()
 
-use = [(428, 288), (288, 473), (473, 147), (147, 276), (276, 214)]
-(cost, path) = matrix_bad_but_accurate(use)
-print( (cost, path) )
-trace(use, path)
+#use = [(428, 288), (288, 473), (473, 2), (2, 147), (147, 276), (276, 214)]
+#(cost, path) = matrix_bad_but_accurate(use)
+#print( (cost, path) )
+#trace(use, path)
 
