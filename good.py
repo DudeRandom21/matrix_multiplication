@@ -33,9 +33,19 @@ def test_matrix(lst):
 
     costs = []
     best_metric = []
-    for i in range(len(lst)-1):
-        costs.append( (lst[i][0] * lst[i][1] * lst[i+1][1], i) )
-        best_metric.append( ( lst[i][0] * lst[i+1][1], i ) )
+
+    if len(lst) == 2:
+        best_metric.append( (1,0) )
+        costs.append( (lst[0][0] * lst[0][1] * lst[1][1], 0) )
+    else:
+        m = min(min(item) for item in lst)
+        for i in range(len(lst)-1):
+            costs.append( (lst[i][0] * lst[i][1] * lst[i+1][1], i) )
+        for i in range(len(lst)):
+            if lst[i][0] == m:
+                best_metric.append( (1, i) )
+            elif lst[i][1] == m and i > 0:
+                best_metric.append( (1, i-1) )
 
     (best, index) = min(best_metric)
     new_matrix = (lst[index][0], lst[index+1][1])
@@ -81,7 +91,7 @@ def trace(lst, indecies):
     trace(lst, indecies)
 
 
-# test()
+test()
 
 # use = [(428, 288), (288, 473), (473, 147), (147, 276), (276, 214)]
 
