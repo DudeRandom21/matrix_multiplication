@@ -2,9 +2,7 @@
 import copy, random
 
 def matrix_bad_but_accurate(lst):
-    #print (lst)
     if len(lst) < 2:
-        #print ("were in the base case")
         return (0, [])
     best = -1
     best_idx = 0
@@ -17,7 +15,6 @@ def matrix_bad_but_accurate(lst):
         cpy[i] = (prev[0], curr[1])
         del cpy[i-1]
         (rec_cost, rec_path) = matrix_bad_but_accurate(cpy)
-        #print ((rec_cost, rec_path))
         cost = cost + rec_cost
         if best == -1 or cost < best:
             best = cost
@@ -57,34 +54,37 @@ def gen_test_cases(size, min_int, max_int):
 def test():
     test_cases = []
     for i in range(50000):
-        test = gen_test_cases(5, 1, 500)
+        test = gen_test_cases(8, 1, 200)
         test_cases.append(test)
     for case in test_cases:
-        correct = matrix_bad_but_accurate(case)[0]
+        correct, path = matrix_bad_but_accurate(case)
         test_ans = test_matrix(case)
         if correct != test_ans:
             print(case)
             print("Correct Answer: {correct} \n False Answer: {incorrect}".format(correct=correct, incorrect=test_ans))
+            print("Path: ", path)
+            trace(case, path)
             return False
 
 def trace(lst, indecies):
     if len(lst) < 2:
+        print(lst)
         return
 
     lst = copy.deepcopy(lst)
+    print(lst)
     indecies = copy.deepcopy(indecies)
     i = indecies.pop()
     (left, _) = lst.pop(i-1)
     (_, right) = lst.pop(i-1)
     lst.insert(i-1, (left, right) )
-    print(lst)
     trace(lst, indecies)
 
 
-# test()
+#test()
 
-# use = [(428, 288), (288, 473), (473, 147), (147, 276), (276, 214)]
-
-# print( matrix_bad_but_accurate(use) )
-# print( test_matrix(use) )
+use = [(428, 288), (288, 473), (473, 147), (147, 276), (276, 214)]
+(cost, path) = matrix_bad_but_accurate(use)
+print( (cost, path) )
+trace(use, path)
 
