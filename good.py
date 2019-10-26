@@ -54,6 +54,10 @@ def test_matrix(lst):
     p.append(index)
     return (c, p)
 
+def efficient_matrix(lst):
+    if len(lst) < 2:
+        return (0, [1])
+
 
 def gen_test_cases(size, min_int, max_int):
     previous = random.randint(min_int, max_int)
@@ -101,11 +105,26 @@ def trace(lst, indecies):
     
     helper(lst, indecies)
 
+def calcCost(lst, path):
+    lst = copy.deepcopy(lst)
+    cost = 0
+    for pi in range(len(path)-1, -1, -1):
+        i = path[pi]
+        cost = cost + (lst[i-1][0] * lst[i][0] * lst[i][1])
+        (left, _) = lst.pop(i-1)
+        (_, right) = lst.pop(i-1)
+        lst.insert(i-1, (left, right) )
+    return cost
 
-test()
 
-#use = [(428, 288), (288, 473), (473, 2), (2, 147), (147, 276), (276, 214)]
-#(cost, path) = matrix_bad_but_accurate(use)
-#print( (cost, path) )
-#trace(use, path)
 
+#test()
+
+#matricies = [(428, 288), (288, 473), (473, 2), (2, 147), (147, 276), (276, 214)]
+matricies = [(127, 100), (100, 421), (421, 51), (51, 422), (422, 50)]
+
+(cost, path) = matrix_bad_but_accurate(matricies)
+print(calcCost(matricies, [1,2,3,4]))
+
+print( (cost, [path]) )
+trace(matricies, [1,2,3,4])
