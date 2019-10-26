@@ -26,7 +26,7 @@ def matrix_bad_but_accurate(lst):
 def test_matrix(lst):
     lst = copy.deepcopy(lst)
     if len(lst) < 2:
-        return 0
+        return (0, [])
 
     costs = []
     best_metric = []
@@ -49,7 +49,10 @@ def test_matrix(lst):
     lst.pop(index)
     lst.pop(index)
     lst.insert(index, new_matrix)
-    return costs[index][0] + test_matrix(lst)
+    (c, p) = test_matrix(lst)
+    c += costs[index][0]
+    p.append(index)
+    return (c, p)
 
 
 def gen_test_cases(size, min_int, max_int):
@@ -68,11 +71,13 @@ def test():
         test_cases.append(test)
     for case in test_cases:
         correct, path = matrix_bad_but_accurate(case)
-        test_ans = test_matrix(case)
+        test_ans, test_path = test_matrix(case)
         if correct != test_ans:
             print("Correct Answer: {correct} \n False Answer: {incorrect}".format(correct=correct, incorrect=test_ans))
             print("Path: ", path)
             trace(case, path)
+            print("Test_Path: ", test_path)
+            trace(case, test_path)
             return False
 
 def trace(lst, indecies):
